@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Погода в городе</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #1e1e1e;
+            color: #f5f5f5;
+            padding: 20px;
+            text-align: center;
+            line-height: 1.6;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        header {
+            margin-bottom: 20px;
+        }
+        h1, h2, p {
+            color: #ffffff;
+        }
+        h1 {
+            font-size: 2em;
+        }
+        h2 {
+            font-size: 1.5em;
+            margin-top: 10px;
+        }
+        .weather-info {
+            font-size: 1em;
+            background-color: #333;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            margin-bottom: 15px;
+        }
+        .weather-info p {
+            margin-bottom: 10px;
+        }
+        .icon {
+            width: 120px;
+            height: 120px;
+            margin: 15px 0;
+        }
+        .refresh-btn {
+            background-color: #008cba;
+            color: white;
+            padding: 12px 25px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .refresh-btn:hover {
+            background-color: #005f75;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #ccc;
+        }
+        /* Мобильная адаптация */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.6em;
+            }
+            .weather-info {
+                font-size: 0.9em;
+                padding: 10px;
+            }
+            .refresh-btn {
+                font-size: 1em;
+                padding: 10px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>погода в городе <span th:text="${city}">г. название</span></h1>
+        <h2>последнее обновление: <span id="date-time">загрузка...</span></h2>
+    </header>
+
+    <div class="weather-info">
+        <p>температура: <span th:text="${temperature}">0</span>°c</p>
+        <p>ощущается как: <span th:text="${feelsLike}">0</span>°c</p>
+        <p>описание: <span th:text="${description}">неизвестно</span></p>
+        <p>давление: <span th:text="${pressure}">0</span> гпа</p>
+        <p>влажность: <span th:text="${humidity}">0</span>%</p>
+        <p>ветер: <span th:text="${windSpeed}">0</span> м/с, направление <span th:text="${windDeg}">0</span>°</p>
+    </div>
+
+    <div>
+        <img th:src="'https://openweathermap.org/img/wn/' + ${icon} + '@2x.png'" alt="иконка погоды" class="icon"/>
+    </div>
+
+    <div class="weather-info">
+        <p>координаты: <span th:text="${lat}">0</span>, <span th:text="${lon}">0</span></p>
+        <p>восход: <span th:text="${sunrise}">00:00</span></p>
+        <p>закат: <span th:text="${sunset}">00:00</span></p>
+    </div>
+
+    <button class="refresh-btn" onclick="refreshPage()">обновить страницу</button>
+
+    <footer class="footer">
+    </footer>
+
+    <script>
+        // обновление текущей даты и времени
+        function updateDateTime() {
+            const now = new Date();
+            const options = {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            };
+            document.getElementById('date-time').textContent = now.toLocaleString('ru-RU', options);
+        }
+
+        // функция для обновления страницы
+        function refreshPage() {
+            location.reload(); // перезагружает текущую страницу
+        }
+
+        // обновляем дату и время каждую секунду
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
+    </script>
+</body>
+</html>
